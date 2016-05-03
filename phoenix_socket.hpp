@@ -1,6 +1,7 @@
 #include <iostream>
 #include <future>
 #include <queue>
+#include <memory>
 
 #include "easywsclient.hpp"
 #include "json.hpp"
@@ -24,8 +25,6 @@ public:
   {
     running = false;
     cond.notify_one();
-    
-    delete ws;
   }
 
   void join(std::string topic, std::string payload = std::string())
@@ -84,7 +83,7 @@ private:
       }
   }
 
-  WebSocket::pointer ws;
+  std::unique_ptr<WebSocket> ws;
   unsigned int ref;
 
   std::atomic_bool running;
